@@ -82,7 +82,9 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 		$.each(['remove'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
-				if(!!this[0]._placeholderObj) this[0]._placeholderObj.parentNode.removeChild(this[0]._placeholderObj);
+				try {
+					if(!!this[0]._placeholderObj) this[0]._placeholderObj.parentNode.removeChild(this[0]._placeholderObj);
+				} catch(e) {}
 				return of.apply(this, arguments);
 			}
 		});
