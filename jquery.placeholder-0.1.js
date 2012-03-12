@@ -63,7 +63,9 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 			$.fn[v] = function() {
 				if(!$(this).is(':input[placeholder]')) of.apply(this, arguments);
 				var self = of.apply(this, arguments);
-				if(!!self[0]._placeholderObj && !self[0].value.length) { $(self[0]._placeholderObj).show(); return self; }
+				try {
+					if(!!self[0]._placeholderObj && !self[0].value.length) { $(self[0]._placeholderObj).show(); return self; }
+				} catch(e) {}
 				if(self.is(':input[placeholder]:visible:not(.placeholderAdded)')) { self.each(_PlaceHolderMaker); return self; }
 				return self;
 			}
@@ -73,7 +75,11 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 			$.fn[v] = function() {
 				if(!$(this).is(':input[placeholder]')) of.apply(this, arguments);
 				var self = of.apply(this, arguments);
-				if(!self[0]._placeholderObj) return self;
+				try {
+					if(!self[0]._placeholderObj) return self;
+				} catch(e) {
+					return self;
+				}
 				if($(self[0]._placeholderObj).is(':hidden')) return self;
 				$(self[0]._placeholderObj).hide();
 				return self;
@@ -83,7 +89,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 			var of = $.fn[v];
 			$.fn[v] = function() {
 				try {
-					if(!!this[0]._placeholderObj) this[0]._placeholderObj.parentNode.removeChild(this[0]._placeholderObj);
+					if(!!(this[0]._placeholderObj)) this[0]._placeholderObj.parentNode.removeChild(this[0]._placeholderObj);
 				} catch(e) {}
 				return of.apply(this, arguments);
 			}
