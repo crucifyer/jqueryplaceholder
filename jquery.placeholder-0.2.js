@@ -27,6 +27,8 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 			if(!this.id) this.id = '_PHSeq' + phSeq;
 			phSeq ++;
 			var input = this;
+			var w = $(this).width();
+			if(this.tagName == 'TEXTAREA') w -= 16;
 			this._placeholderObj = $('<label />', {
 				'for':this.id,
 				'class':'placeholder',
@@ -35,14 +37,16 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 				'position':'absolute',
 				'cursor':'text',
 				'overflow':'hidden',
-				'white-space':'nowrap',
+				'white-space':'normal',
 				'float':'none',
 				'display':'block',
 				'margin':'0',
 				'padding':'0',
-				'width':$(this).width(),
+				'width': w + 'px',
+				'height':$(this).height() + 'px',
 				'font-size':$(this).css('font-size')
 			})[0];
+			
 			$(this).before(this._placeholderObj);
 			
 			var inpoffset = $(this).offset();
@@ -51,6 +55,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 				+ (parseInt($(this).css('padding-left')) + parseInt($(this).css('border-left-width')) + 1 + inpoffset.left - phoffset.left) +'px'});
 		
 			if(!!this.value.length) $(this._placeholderObj).hide();
+			$(this._placeholderObj).on('click', function() { this.focus(); });
 			$(this).on('focus', function() {
 				$(this._placeholderObj).hide();
 			}).on('blur', function() {
@@ -61,7 +66,10 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 		$.each(['show', 'fadeIn', 'slideDown'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
-				if(!$(this).is(':input[placeholder]')) of.apply(this, arguments);
+				if(!$(this).is(':input[placeholder]')) {
+					var self = of.apply(this, arguments);
+					$(':input[placeholder]:not(.placeholderAdded)', self).each(_PlaceHolderMaker);
+				}
 				var self = of.apply(this, arguments);
 				try {
 					if(!!self[0]._placeholderObj && !self[0].value.length) { $(self[0]._placeholderObj).show(); return self; }
@@ -73,7 +81,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 		$.each(['hide', 'fadeOut', 'slideUp'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
-				if(!$(this).is(':input[placeholder]')) of.apply(this, arguments);
+				if(!$(this).is(':input[placeholder]')) return of.apply(this, arguments);
 				var self = of.apply(this, arguments);
 				try {
 					if(!self[0]._placeholderObj) return self;
