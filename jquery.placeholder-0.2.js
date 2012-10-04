@@ -121,3 +121,5 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 		});
 	}
 })(jQuery);
+
+var jQueryPlaceHolder = 1;
