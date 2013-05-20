@@ -22,6 +22,19 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 (function($) {
 	if(!('placeholder' in $('<input />')[0])) {
 		var phSeq = 0;
+
+		function toInt(v) {
+			return v.replace(/[^\d]+$/, '') * 1;
+		}
+
+		function relocatePlaceholder() {
+			$(this).css('margin', '0');
+			var inpoffset = $(this.inp).offset();
+			var phoffset = $(this).offset();
+			$(this).css({'margin':(toInt($(this.inp).css('padding-top')) + toInt($(this.inp).css('border-top-width')) + 1 + inpoffset.top - phoffset.top) + 'px 0 0 '
+				+ (toInt($(this.inp).css('padding-left')) + toInt($(this.inp).css('border-left-width')) + 1 + inpoffset.left - phoffset.left) +'px'});
+		}
+
 		var _PlaceHolderMaker = function() {
 			if(!!this._placeholderObj) return;
 			if(!this.id) this.id = '_PHSeq' + phSeq;
@@ -46,14 +59,13 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 				'height':$(this).height() + 'px',
 				'font-size':$(this).css('font-size')
 			})[0];
-			
+
+			this._placeholderObj.inp = this;
+
 			$(this).before(this._placeholderObj);
-			
-			var inpoffset = $(this).offset();
-			var phoffset = $(this._placeholderObj).offset();
-			$(this._placeholderObj).css({'margin':(parseInt($(this).css('padding-top')) + parseInt($(this).css('border-top-width')) + 1 + inpoffset.top - phoffset.top) + 'px 0 0 '
-				+ (parseInt($(this).css('padding-left')) + parseInt($(this).css('border-left-width')) + 1 + inpoffset.left - phoffset.left) +'px'});
-		
+
+			$(this._placeholderObj).each(relocatePlaceholder);
+
 			if(!!this.value.length) $(this._placeholderObj).hide();
 			$(this._placeholderObj).on('click', function() { this.focus(); });
 			$(this).on('focus', function() {
@@ -62,7 +74,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 				if(!this.value.length) $(this._placeholderObj).show();
 			}).addClass('placeholderAdded');
 		}
-	
+
 		$.each(['show', 'fadeIn', 'slideDown'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
@@ -118,6 +130,10 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 
 		$(function() {
 			$(':input[placeholder]:visible').each(_PlaceHolderMaker);
+
+			setInterval(function() {
+				$('label.placeholder:visible').each(relocatePlaceholder);
+			}, 1000);
 		});
 	}
 })(jQuery);
