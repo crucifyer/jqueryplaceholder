@@ -79,44 +79,38 @@
 		$.each(['show', 'fadeIn', 'slideDown'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
-				var self = of.apply(this, arguments);
-				self.filter(':not(:input[placeholder])').each(function() {
-					$(':input[placeholder]', this).filter(function() {
-						return !this._placeholderObj;
-					}).each(_PlaceHolderMaker);
-				});
-				self.filter(function() {
-					return !!this._placeholderObj;
-				}).each(function() {
+				of.apply(this, arguments);
+				this.each(function() {
+					var $this = $(this);
+					if($this.is(':not(:input[placeholder])')) {
+						$(':input[placeholder]:not(.placeholderAdded)', this).each(_PlaceHolderMaker);
+						return;
+					}
+					if(!this._placeholderObj) {
+						$this.each(_PlaceHolderMaker);
+					}
 					$(this._placeholderObj).hide()[v](arguments);
 				});
-				self.filter(':input[placeholder]').filter(function() {
-					return !this._placeholderObj;
-				}).each(_PlaceHolderMaker);
 
-				return self;
+				return this;
 			}
 		});
 		$.each(['hide', 'fadeOut', 'slideUp'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
-				var self = of.apply(this, arguments);
-				self.filter(function() {
-					return !!this._placeholderObj;
-				}).each(function() {
-					$(this._placeholderObj)[v](arguments);
+				of.apply(this, arguments);
+				this.each(function() {
+					if(this._placeholderObj) $(this._placeholderObj)[v](arguments);
 				});
 
-				return self;
+				return this;
 			}
 		});
 		$.each(['remove'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
-				this.filter(function() {
-					return !!this._placeholderObj;
-				}).each(function() {
-					$(this._placeholderObj).remove();
+				this.each(function() {
+					if(this._placeholderObj) $(this._placeholderObj)[v]();
 				});
 
 				return of.apply(this, arguments);
