@@ -20,11 +20,19 @@
  */
 
 (function($) {
-	if(!('placeholder' in $('<input />')[0])) {
+	if('placeholder' in $('<input />')[0]) {
 		var phSeq = 0;
 
 		function toInt(v) {
 			return v.replace(/[^\d]+$/, '') * 1;
+		}
+
+		function copyArgs(argums) {
+			var args = [], i;
+			for(i = 0; i < argums.length; i ++) {
+				args.push(argums[i]);
+			}
+			return args;
 		}
 
 		function relocatePlaceholder() {
@@ -38,9 +46,9 @@
 		var _PlaceHolderMaker = function() {
 			if(this._placeholderObj) return;
 			if(!this.id) { this.id = '_PHSeq' + phSeq; phSeq ++; }
-			var input = this;
-			var w = $(this).width();
+			var input = this, w = $(this).width();
 			if(this.tagName == 'TEXTAREA') w -= 16;
+
 			this._placeholderObj = $('<label />', {
 				'for': this.id,
 				'class': 'placeholder',
@@ -51,7 +59,7 @@
 				'overflow': 'hidden',
 				'white-space': 'normal',
 				'float': 'none',
-				'display': 'block',
+				'display': !this.value ? 'block' : 'none',
 				'margin': '0',
 				'padding': '0',
 				'width': w + 'px',
@@ -63,23 +71,24 @@
 
 			$(this).before(this._placeholderObj);
 
-			$(this._placeholderObj).each(relocatePlaceholder);
-
-			if(this.value.length) $(this._placeholderObj).hide();
-			$(this._placeholderObj).on('click', function() {
+			$(this._placeholderObj).each(relocatePlaceholder).on('click', function() {
 				this.focus();
 			});
-			$(this).on('focus',function() {
+
+			$(this).on('focus', function() {
 				$(this._placeholderObj).hide();
-			}).on('blur',function() {
-					if(!this.value.length) $(this._placeholderObj).show();
-				}).addClass('placeholderAdded');
+			}).on('blur', function() {
+				if(!this.value) $(this._placeholderObj).show();
+			}).addClass('placeholderAdded');
 		}
 
 		$.each(['show', 'fadeIn', 'slideDown'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
+				var args = copyArgs(arguments);
+
 				of.apply(this, arguments);
+
 				this.each(function() {
 					var $this = $(this);
 					if($this.is(':not(:input[placeholder])')) {
@@ -89,7 +98,10 @@
 					if(!this._placeholderObj) {
 						$this.each(_PlaceHolderMaker);
 					}
-					$(this._placeholderObj).hide()[v](arguments);
+					if(!this.value) {
+						var $self = $(this._placeholderObj).hide();
+						$self[v].apply($self, args.slice());
+					}
 				});
 
 				return this;
@@ -98,9 +110,15 @@
 		$.each(['hide', 'fadeOut', 'slideUp'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
+				var args = copyArgs(arguments);
+
 				of.apply(this, arguments);
+
 				this.each(function() {
-					if(this._placeholderObj) $(this._placeholderObj)[v](arguments);
+					if(this._placeholderObj) {
+						var $self = $(this._placeholderObj);
+						$self[v].apply($self, args.slice());
+					}
 				});
 
 				return this;
