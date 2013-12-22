@@ -88,7 +88,7 @@
 				self.filter(function() {
 					return !!this._placeholderObj;
 				}).each(function() {
-					$(this._placeholderObj)[v]();
+					$(this._placeholderObj).hide()[v](arguments);
 				});
 				self.filter(':input[placeholder]').filter(function() {
 					return !this._placeholderObj;
@@ -104,7 +104,7 @@
 				self.filter(function() {
 					return !!this._placeholderObj;
 				}).each(function() {
-					$(this._placeholderObj)[v]();
+					$(this._placeholderObj)[v](arguments);
 				});
 
 				return self;
