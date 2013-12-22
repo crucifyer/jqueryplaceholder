@@ -81,9 +81,18 @@
 			$.fn[v] = function() {
 				var self = of.apply(this, arguments);
 				self.filter(':not(:input[placeholder])').each(function() {
-					$(':input[placeholder]:not(.placeholderAdded)', this).each(_PlaceHolderMaker);
+					$(':input[placeholder]', this).filter(function() {
+						return !this._placeholderObj;
+					}).each(_PlaceHolderMaker);
 				});
-				self.filter(':input[placeholder]:not(.placeholderAdded)').each(_PlaceHolderMaker);
+				self.filter(function() {
+					return !!this._placeholderObj;
+				}).each(function() {
+					$(this._placeholderObj)[v]();
+				});
+				self.filter(':input[placeholder]').filter(function() {
+					return !this._placeholderObj;
+				}).each(_PlaceHolderMaker);
 
 				return self;
 			}
@@ -95,7 +104,7 @@
 				self.filter(function() {
 					return !!this._placeholderObj;
 				}).each(function() {
-					$(this._placeholderObj).hide();
+					$(this._placeholderObj)[v]();
 				});
 
 				return self;
@@ -125,8 +134,12 @@
 
 				of.apply(this, arguments);
 
-				arguments[0].filter(':input[placeholder]:visible:not(.placeholderAdded)').each(_PlaceHolderMaker);
-				arguments[0].find(':input[placeholder]:visible:not(.placeholderAdded)').each(_PlaceHolderMaker);
+				arguments[0].filter(':input[placeholder]:visible').filter(function() {
+					return !this._placeholderObj;
+				}).each(_PlaceHolderMaker);
+				arguments[0].find(':input[placeholder]:visible').filter(function() {
+					return !this._placeholderObj;
+				}).each(_PlaceHolderMaker);
 
 				return this;
 			}
