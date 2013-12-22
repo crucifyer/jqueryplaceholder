@@ -87,7 +87,9 @@
 			$.fn[v] = function() {
 				var args = copyArgs(arguments);
 
-				of.apply(this, arguments);
+				of.apply(this, args);
+
+				if(typeof(args[args.length - 1]) == "function") args.pop();
 
 				this.each(function() {
 					var $this = $(this);
@@ -112,7 +114,9 @@
 			$.fn[v] = function() {
 				var args = copyArgs(arguments);
 
-				of.apply(this, arguments);
+				of.apply(this, args);
+
+				if(typeof(args[args.length - 1]) == "function") args.pop();
 
 				this.each(function() {
 					if(this._placeholderObj) {
@@ -127,29 +131,33 @@
 		$.each(['remove'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
+				var args = copyArgs(arguments);
+
 				this.each(function() {
 					if(this._placeholderObj) $(this._placeholderObj)[v]();
 				});
 
-				return of.apply(this, arguments);
+				return of.apply(this, args);
 			}
 		});
 		$.each(['append', 'prepend', 'after', 'before'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
+				var args = copyArgs(arguments);
+
 				if(this.is('label.placeholder')) {
-					of.apply(this, arguments);
+					of.apply(this, args);
 					return this;
 				}
 
-				if(!arguments[0].jquery) arguments[0] = $(arguments[0]);
+				if(!args[0].jquery) args[0] = $(args[0]);
 
-				of.apply(this, arguments);
+				of.apply(this, args);
 
-				arguments[0].filter(':input[placeholder]:visible').filter(function() {
+				args[0].filter(':input[placeholder]:visible').filter(function() {
 					return !this._placeholderObj;
 				}).each(_PlaceHolderMaker);
-				arguments[0].find(':input[placeholder]:visible').filter(function() {
+				args[0].find(':input[placeholder]:visible').filter(function() {
 					return !this._placeholderObj;
 				}).each(_PlaceHolderMaker);
 
