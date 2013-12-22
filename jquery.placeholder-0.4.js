@@ -83,9 +83,7 @@
 				self.filter(':not(:input[placeholder])').each(function() {
 					$(':input[placeholder]:not(.placeholderAdded)', this).each(_PlaceHolderMaker);
 				});
-				self.filter(function() {
-					return !this._placeholderObj;
-				}).each(_PlaceHolderMaker);
+				self.filter(':input[placeholder]:not(.placeholderAdded)').each(_PlaceHolderMaker);
 
 				return self;
 			}
