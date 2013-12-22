@@ -20,7 +20,7 @@
  */
 
 (function($) {
-	if('placeholder' in $('<input />')[0]) {
+	if(!('placeholder' in $('<input />')[0])) {
 		var phSeq = 0;
 
 		function toInt(v) {
@@ -36,7 +36,7 @@
 		}
 
 		function relocatePlaceholder() {
-			$(this).css('margin', '0');
+			$(this).css('margin', 0);
 			var inpoffset = $(this.inp).offset();
 			var phoffset = $(this).offset();
 			$(this).css({'margin': (toInt($(this.inp).css('padding-top')) + toInt($(this.inp).css('border-top-width')) + 1 + inpoffset.top - phoffset.top) + 'px 0 0 '
@@ -59,9 +59,9 @@
 				'overflow': 'hidden',
 				'white-space': 'normal',
 				'float': 'none',
-				'display': !this.value ? 'block' : 'none',
-				'margin': '0',
-				'padding': '0',
+				'display': this.value ? 'none' : 'block',
+				'margin': 0,
+				'padding': 0,
 				'width': w + 'px',
 				'height': $(this).height() + 'px',
 				'font-size': $(this).css('font-size')
