@@ -6,15 +6,21 @@
  Project Page : http://code.google.com/p/jqueryplaceholder/
 
  -- placeholder css --
- caution : browsers cannot parse this (label.placeholder, input::-webkit-input-placeholder, input:-moz-placeholder, textarea::-webkit-input-placeholder, textarea:-moz-placeholder)
+ caution : browsers cannot parse this (label.placeholder, ::-webkit-input-placeholder, ::-moz-placeholder, :-moz-placehoder, :-ms-input-placeholder)
 
  label.placeholder {
  color:#999 !important;
  }
- input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+ ::-webkit-input-placeholder {
  color:#999 !important;
  }
- input:-moz-placeholder, textarea:-moz-placeholder {
+ ::-moz-placeholder {
+ color:#999 !important;
+ }
+ :-moz-placeholder {
+ color:#999 !important;
+ }
+ :-ms-input-placeholder {
  color:#999 !important;
  }
  */
