@@ -2,7 +2,7 @@
 
 > forked original project http://www.phpschool.com/link/tipntech/74948
 
-- demo : http://jsbin.com/wutipe/1/edit?html,css,output
+- demo : http://jsbin.com/wutipe/1
 - source : https://raw.githubusercontent.com/crucifyer/jqueryplaceholder/master/jquery.placeholder.js
 - download : https://raw.githubusercontent.com/crucifyer/jqueryplaceholder/master/jquery.placeholder.min.js
 
