@@ -46,7 +46,7 @@
 			var inpoffset = $(this.inp).offset();
 			var phoffset = $(this).offset();
 			$(this).css({'margin': (toInt($(this.inp).css('padding-top')) + toInt($(this.inp).css('border-top-width')) + 1 + inpoffset.top - phoffset.top) + 'px 0 0 '
-			+ (toInt($(this.inp).css('padding-left')) + toInt($(this.inp).css('border-left-width')) + 1 + inpoffset.left - phoffset.left) + 'px'});
+				+ (toInt($(this.inp).css('padding-left')) + toInt($(this.inp).css('border-left-width')) + 1 + inpoffset.left - phoffset.left) + 'px'});
 		}
 
 		var _PlaceHolderMaker = function() {
