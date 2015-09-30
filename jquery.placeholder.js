@@ -88,34 +88,6 @@
 			}).addClass('placeholderAdded');
 		}
 
-		$.each(['val'], function(i, v) {
-			var of = $.fn[v];
-			$.fn[v] = function() {
-				var args = copyArgs(arguments);
-
-				of.apply(this, args);
-
-				if(typeof(args[args.length - 1]) == "function") args.pop();
-
-				this.each(function() {
-					var $this = $(this);
-					if($this.is(':not(:input[placeholder])')) {
-						$(':input[placeholder]:not(.placeholderAdded)', this).each(_PlaceHolderMaker);
-						return;
-					}
-					if(!this._placeholderObj) {
-						$this.each(_PlaceHolderMaker);
-					}
-					if(!this.value) {
-						$(this._placeholderObj).show();
-					} else {
-						$(this._placeholderObj).hide();
-					}
-				});
-
-				return this;
-			}
-		});
 		$.each(['show', 'fadeIn', 'slideDown'], function(i, v) {
 			var of = $.fn[v];
 			$.fn[v] = function() {
