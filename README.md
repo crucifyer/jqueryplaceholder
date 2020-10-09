@@ -1,8 +1,8 @@
 # jQuery Placeholder Emulator for old IE
 
-> forked original project http://www.phpschool.com/link/tipntech/74948
+> forked original project https://phpschool.com/link/tipntech/74948
 
-- demo : http://jsbin.com/wutipe/1
+- demo : https://jsbin.com/wutipe/1
 - source : https://raw.githubusercontent.com/crucifyer/jqueryplaceholder/master/jquery.placeholder.js
 - download : https://raw.githubusercontent.com/crucifyer/jqueryplaceholder/master/jquery.placeholder.min.js
 
@@ -21,7 +21,7 @@
 - optimize code
 
 ##### update 0.3
-- lable realign when input tag moved.
+- label realign when input tag moved.
 
 ##### update 0.2
 - hided {{{ tag:has(input[placeholder]) }}} when .show()
