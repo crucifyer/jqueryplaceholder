@@ -1,5 +1,7 @@
 # jQuery Placeholder Emulator for old IE
 
+## Now that IE is a thing of the past, this library is no longer needed.
+
 > forked original project https://phpschool.com/link/tipntech/74948
 
 - demo : https://jsbin.com/wutipe/1
@@ -26,3 +28,5 @@
 ##### update 0.2
 - hided {{{ tag:has(input[placeholder]) }}} when .show()
 - wrap text with textarea
+
+## Now that IE is a thing of the past, this library is no longer needed.
